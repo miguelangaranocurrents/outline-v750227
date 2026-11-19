@@ -4,6 +4,7 @@ import {
   closestCenter,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -81,6 +82,14 @@ function PinnedDocuments({
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
+      // Start dragging once the pointer moves, so a press-and-hold still
+      // registers as a click that opens the document.
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      // Require a short press on touch so that scrolling is not treated as a drag.
       activationConstraint: {
         delay: 100,
         tolerance: 5,
